@@ -43,7 +43,8 @@
     "test": "jest",
     "start": "npm run server",
     "server": "tsx watch --clear-screen=false src/cli.ts server",
-    "client": "tsx src/cli.ts client"
+    "client": "tsx src/cli.ts client",
+    "streamhttp": "tsx src/streamable-http-echo-server.ts"
   },
   "dependencies": {
     "content-type": "^1.0.5",

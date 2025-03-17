@@ -125,10 +125,23 @@ export class StreamableHttpServerTransport implements Transport {
         throw new Error(`Unsupported content-type: ${ct.type}`);
       }
 
-      body = parsedBody ?? await getRawBody(req, {
-        limit: MAXIMUM_MESSAGE_SIZE,
-        encoding: ct.parameters.charset ?? "utf-8",
-      });
+      if (parsedBody) {
+        body = parsedBody;
+      } else {
+        // Check if stream is readable before attempting to read
+        if (!req.readable) {
+          throw new Error("Request stream is not readable. It may have been consumed already.");
+        }
+
+        try {
+          body = await getRawBody(req, {
+            limit: MAXIMUM_MESSAGE_SIZE,
+            encoding: ct.parameters.charset ?? "utf-8",
+          });
+        } catch (bodyError: unknown) {
+          throw new Error(`Failed to read request body: ${(bodyError as Error).message}`);
+        }
+      }
     } catch (error) {
       res.writeHead(400, { "Content-Type": "text/plain" });
       res.end(String(error));
