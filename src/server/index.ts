@@ -29,6 +29,10 @@ import {
   SUPPORTED_PROTOCOL_VERSIONS,
 } from "../types.js";
 
+export * from "./streamableHttp.js";
+export * from "./stdio.js";
+export * from "./sse.js";
+
 export type ServerOptions = ProtocolOptions & {
   /**
    * Capabilities to advertise as being supported by this server.
