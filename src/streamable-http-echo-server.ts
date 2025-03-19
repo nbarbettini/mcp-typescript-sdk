@@ -35,7 +35,7 @@ server.tool(
 // Add a random number generator tool
 server.tool(
   "random",
-  { min: z.number(), max: z.number() },
+  { min: z.number({ description: "The minimum value of the range" }), max: z.number({ description: "The maximum value of the range" }) },
   async ({ min, max }) => ({
     content: [{ type: "text", text: `Random number between ${min} and ${max}: ${Math.floor(Math.random() * (max - min + 1)) + min}` }]
   })
