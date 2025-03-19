@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Server } from "./server/index.js";
-import { StreamableHttpServerTransport } from "./server/streamableHttp.js";
 import {
   CallToolRequest,
   CallToolRequestSchema,
@@ -354,17 +353,18 @@ class SlackClient {
   }
 }
 
-export async function initializeSlackServer(
-  transport: StreamableHttpServerTransport,
-  botToken: string,
-  teamId: string
-): Promise<void> {
-  console.error("Initializing Slack MCP Server...");
+async function main() {
+  const botToken = process.env.SLACK_BOT_TOKEN;
+  const teamId = process.env.SLACK_TEAM_ID;
 
   if (!botToken || !teamId) {
-    throw new Error("Please set SLACK_BOT_TOKEN and SLACK_TEAM_ID");
+    console.error(
+      "Please set SLACK_BOT_TOKEN and SLACK_TEAM_ID environment variables",
+    );
+    process.exit(1);
   }
 
+  console.error("Starting Slack MCP Server...");
   const server = new Server(
     {
       name: "Slack MCP Server",
@@ -542,31 +542,10 @@ export async function initializeSlackServer(
     };
   });
 
-  // Connect the server to the provided transport
-  await server.connect(transport);
-}
-
-// Main entry point for the script
-async function main() {
-  const botToken = process.env.SLACK_BOT_TOKEN;
-  const teamId = process.env.SLACK_TEAM_ID;
-  const port = parseInt(process.env.PORT || "3000");
-
-  if (!botToken || !teamId) {
-    console.error(
-      "Please set SLACK_BOT_TOKEN and SLACK_TEAM_ID environment variables",
-    );
-    process.exit(1);
-  }
-
   // Start the server with our harness
-  startMcpServer(
-    (transport) => initializeSlackServer(transport, botToken, teamId),
-    {
-      port,
-      serverName: "Slack MCP Server",
-    }
-  );
+  startMcpServer(server, {
+    serverName: "Slack MCP Server",
+  });
 }
 
 // Only run if this is the main module (not imported)

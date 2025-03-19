@@ -2,6 +2,7 @@
 import 'dotenv/config'; // Load environment variables from .env file
 import express from 'express';
 import { StreamableHttpServerTransport } from './server/streamableHttp.js';
+import { Server } from './server/index.js';
 import cors from 'cors';
 
 /**
@@ -26,11 +27,11 @@ export type ServerInitializer = (transport: StreamableHttpServerTransport) => Pr
  * This creates a minimal Express server with an MCP endpoint.
  */
 export function startMcpServer(
-  initializeServer: ServerInitializer,
+  initializeServer: ServerInitializer | Server,
   options: McpHarnessOptions
 ): void {
   const app = express();
-  const port = options.port || 3000;
+  const port = options.port || parseInt(process.env.PORT || "3000");
   const serverName = options.serverName;
   const transports = new Map<string, StreamableHttpServerTransport>();
 
@@ -62,7 +63,13 @@ export function startMcpServer(
       transport = new StreamableHttpServerTransport();
 
       // Connect the server to this transport
-      await initializeServer(transport);
+      if (initializeServer instanceof Server) {
+        // If a server instance was passed, connect it directly
+        await initializeServer.connect(transport);
+      } else {
+        // Use the initializer function
+        await initializeServer(transport);
+      }
 
       // Store the transport by its session ID
       transports.set(transport.sessionId, transport);
