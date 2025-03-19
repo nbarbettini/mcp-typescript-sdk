@@ -44,11 +44,16 @@
     "start": "npm run server",
     "server": "tsx watch --clear-screen=false src/cli.ts server",
     "client": "tsx src/cli.ts client",
-    "streamhttp": "tsx src/streamable-http-echo-server.ts"
+    "streamhttp": "tsx src/streamable-http-echo-server.ts",
+    "slack": "tsx src/server-slack.ts",
+    "slack:watch": "tsx watch --clear-screen=false src/server-slack.ts",
+    "echo": "tsx src/server-echo.ts",
+    "echo:watch": "tsx watch --clear-screen=false src/server-echo.ts"
   },
   "dependencies": {
     "content-type": "^1.0.5",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "eventsource": "^3.0.2",
     "express": "^5.0.1",
     "express-rate-limit": "^7.5.0",

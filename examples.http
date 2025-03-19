@@ -1,5 +1,5 @@
 ### Ping
-curl -X POST http://localhost:3001/mcp \
+curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -9,7 +9,7 @@ curl -X POST http://localhost:3001/mcp \
   }'
 
 ### List tools
-curl -X POST http://localhost:3001/mcp \
+curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
@@ -19,7 +19,7 @@ curl -X POST http://localhost:3001/mcp \
   }'
 
 ### Call tool
-curl -X POST http://localhost:3001/mcp \
+curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -d '{
