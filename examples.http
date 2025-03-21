@@ -1,3 +1,27 @@
+### Initialize
+curl -X POST http://localhost:3000/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {
+        "roots": {
+          "listChanged": true
+        },
+        "sampling": {}
+      },
+      "clientInfo": {
+        "name": "ExampleClient",
+        "version": "1.0.0"
+      }
+    }
+  }'
+
+
 ### Ping
 curl -X POST http://localhost:3000/mcp \
   -H "Content-Type: application/json" \
@@ -27,11 +51,9 @@ curl -X POST http://localhost:3000/mcp \
     "id": "1234",
     "method": "tools/call",
     "params": {
-      "name": "random",
+      "name": "slack_list_channels",
       "arguments": {
-        "min": 1,
-        "max": 100
+        "limit": 100
       }
     }
   }'
-
